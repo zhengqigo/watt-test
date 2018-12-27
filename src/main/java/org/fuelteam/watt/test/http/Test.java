@@ -1,6 +1,7 @@
 package org.fuelteam.watt.test.http;
 
 import java.net.URLEncoder;
+import java.util.List;
 import java.util.Map;
 
 import org.apache.http.client.methods.HttpGet;
@@ -9,8 +10,13 @@ import org.fuelteam.watt.httpclient.RequestExecutor;
 import org.fuelteam.watt.lucky.utils.DateUtil;
 import org.fuelteam.watt.lucky.utils.Vardump;
 import org.joda.time.DateTime;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
 import com.alibaba.fastjson.JSON;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
 public class Test {
@@ -28,7 +34,28 @@ public class Test {
 
         String contents = new RequestExecutor<HttpPost>().build(HttpPost.class).on(url, params, null, null)
                 .timeout(1000, 1000).string(null);
-        Vardump.print(contents);
+        Document doc = Jsoup.parse(contents);
+        Elements container = doc.select("div.BOC_main");
+        Elements trs = container.select("tr");
+        Elements ths = trs.get(0).select("th");
+        List<List<String>> list = Lists.newArrayList();
+        List<String> thList = Lists.newArrayList();
+        for (int i = 0; i < ths.size(); i++) {
+            String thText = ths.get(i).text();
+            thList.add(thText);
+        }
+        list.add(thList);
+        for (Element element : trs) {
+            Elements tds = element.select("td");
+            if (tds == null || tds.size() <= 0) continue;
+            List<String> tdList = Lists.newArrayList();
+            for (int i = 0; i < tds.size(); i++) {
+                String tdText = tds.get(i).text();
+                tdList.add(tdText);
+            }
+            list.add(tdList);
+        }
+        Vardump.print(list);
     }
 
     private static void testGetWithParams() throws Exception {
