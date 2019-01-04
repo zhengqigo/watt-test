@@ -3,12 +3,15 @@ package org.fuelteam.watt.test.http;
 import java.net.URLEncoder;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.fuelteam.watt.httpclient.RequestExecutor;
 import org.fuelteam.watt.lucky.utils.DateUtil;
 import org.fuelteam.watt.lucky.utils.Vardump;
+import org.fuelteam.watt.lucky.utils.WebServiceUtil;
 import org.joda.time.DateTime;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -24,6 +27,7 @@ public class Test {
     public static void main(String[] args) throws Exception {
         testGetWithParams();
         testPostForm();
+        testAsmx();
     }
 
     private static void testPostForm() throws Exception {
@@ -32,8 +36,8 @@ public class Test {
         params.put("pjname", "1316");
         params.put("erectDate", "2019-12-22");
 
-        String contents = new RequestExecutor<HttpPost>().build(HttpPost.class).on(url, params, null, null)
-                .timeout(1000, 1000).string(null);
+        String contents = new RequestExecutor<HttpPost>().build(HttpPost.class)
+                .on(url, params, null, Maps.newHashMap()).timeout(1000, 1000).string(null);
         Document doc = Jsoup.parse(contents);
         Elements container = doc.select("div.BOC_main");
         Elements trs = container.select("tr");
@@ -71,8 +75,23 @@ public class Test {
         body.put("status", "delivery");
         params.put("body", body);
         String finalUrl = url + URLEncoder.encode(JSON.toJSONString(params), "UTF-8");
-        String contents = new RequestExecutor<HttpGet>().build(HttpGet.class).on(finalUrl, null, null, null)
-                .timeout(1000, 1000).string(null);
+        String contents = new RequestExecutor<HttpGet>().build(HttpGet.class)
+                .on(finalUrl, null, null, Maps.newHashMap()).timeout(1000, 1000).string(null);
         Vardump.print(contents);
+    }
+
+    private static void testAsmx() throws Exception {
+        String format = "<a>%s</a><b>%s</b>";
+        String params = String.format(format, "k0NHVwzZwwbefmiPKX5SvBgDfQAFXrL8xPVAfSgZqu1y87i5Sy3jWlEtL4oJfkNZ", 1);
+
+        String envelope = WebServiceUtil.prepare("E", params);
+
+        Map<String, String> headers = Maps.newHashMap();
+        headers.put("Content-Type", "text/xml;charset=UTF-8");
+        String responseXml = WebServiceUtil.post("http://101.132.157.43:8023/Service1.asmx", headers, envelope, 1000,
+                1000);
+        Pattern p = Pattern.compile("<EResult>(.*)</EResult>");
+        Matcher m = p.matcher(responseXml);
+        if (m.find()) Vardump.print(m.group(0));
     }
 }
