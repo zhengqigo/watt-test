@@ -37,7 +37,7 @@ public class Test {
         params.put("erectDate", "2019-12-22");
 
         String contents = new RequestExecutor<HttpPost>().build(HttpPost.class)
-                .on(url, params, null, Maps.newHashMap()).timeout(1000, 1000).string(null);
+                .on(url, params, null, Maps.newHashMap()).timeout(1000, 1000).string();
         Document doc = Jsoup.parse(contents);
         Elements container = doc.select("div.BOC_main");
         Elements trs = container.select("tr");
@@ -76,7 +76,7 @@ public class Test {
         params.put("body", body);
         String finalUrl = url + URLEncoder.encode(JSON.toJSONString(params), "UTF-8");
         String contents = new RequestExecutor<HttpGet>().build(HttpGet.class)
-                .on(finalUrl, null, null, Maps.newHashMap()).timeout(1000, 1000).string(null);
+                .on(finalUrl, null, null, Maps.newHashMap()).timeout(1000, 1000).string();
         Vardump.print(contents);
     }
 
@@ -90,6 +90,7 @@ public class Test {
         headers.put("Content-Type", "text/xml;charset=UTF-8");
         String responseXml = WebServiceUtil.post("http://101.132.157.43:8023/Service1.asmx", headers, envelope, 1000,
                 1000);
+        System.out.println(responseXml);
         Pattern p = Pattern.compile("<EResult>(.*)</EResult>");
         Matcher m = p.matcher(responseXml);
         if (m.find()) Vardump.print(m.group(0));

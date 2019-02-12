@@ -45,6 +45,12 @@
             <groupId>org.fuelteam</groupId>
             <artifactId>watt-lucky</artifactId>
             <version>1.0.1-SNAPSHOT</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.data</groupId>
+                    <artifactId>spring-data-redis</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.fuelteam</groupId>
