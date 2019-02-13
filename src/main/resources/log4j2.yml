@@ -1,0 +1,61 @@
+Configuration:
+  status: warn
+  Properties:
+    Property:
+    - name: APP
+      value: watt-test
+    - name: ROOT
+      value: /logs
+    - name: GZED
+      value: /logs/gzed
+    - name: FORMATTER
+      value: '%d{yyyy-MM-dd HH:mm:ss.SSS} [%5p] [${hostName}] [%t] %logger{1.}:%L - [${APP}] %m%n%ex'
+  Appenders:
+    Console:
+      name: console
+      target: SYSTEM_OUT
+      PatternLayout:
+        pattern: ${FORMATTER}
+    RollingFile:
+    - name: file
+      append: true
+      fileName: ${ROOT}/${APP}.log
+      filePattern: ${GZED}/${APP}.%d{yyyy-MM-dd}.gz
+      PatternLayout:
+        pattern: ${FORMATTER}
+      Policies:
+        TimeBasedTriggeringPolicy:
+          interval: 1
+          modulate: true
+        SizeBasedTriggeringPolicy:
+          size: 10 MB
+      DefaultRolloverStrategy:
+        max: 100
+  Loggers:
+    Root:
+      level: info
+      AppenderRef:
+      - ref: console
+      - ref: file
+    Logger:
+    - name: org.springframework
+      level: warn
+    - name: org.springframework.boot.context.embedded.undertow
+      level: info
+    - name: org.apache.zookeeper
+      level: fatal
+    - name: org.apache.curator
+      level: fatal
+    - name: org.hibernate
+      level: warn
+    - name: org.xnio
+      level: fatal
+    - name: io.undertow
+      level: debug
+    - name: io.undertow.websockets
+      level: fatal
+    - name: io.undertow.session
+      level: fatal
+      AppenderRef:
+      - ref: console
+      - ref: file
