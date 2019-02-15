@@ -58,10 +58,15 @@
             <artifactId>watt-httpclient</artifactId>
             <version>1.0.1-SNAPSHOT</version>
         </dependency>
-         <dependency>
+        <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>1.11.3</version>
+        </dependency>
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20180813</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -83,7 +88,7 @@
             <version>${jmh.version}</version>
             <scope>provided</scope>
         </dependency>
-        
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-log4j2</artifactId>
