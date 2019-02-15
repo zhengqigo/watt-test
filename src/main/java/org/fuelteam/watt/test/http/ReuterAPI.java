@@ -55,6 +55,7 @@ public class ReuterAPI {
         Token token = token(str, ReuterKeyEnum.TRAIL);
         String cachedKey = PREFIX + ReuterKeyEnum.TRAIL.getValue();
         // TODO write to cache
+        redissonClient.set
         logger.info("Event fired onChangeKeyTrail KEY_TRAIL? {} token? {}", str, token);
     }
     
