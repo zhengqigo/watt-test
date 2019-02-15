@@ -8,8 +8,10 @@ import org.apache.http.client.methods.HttpPost;
 import org.fuelteam.watt.httpclient.Proxy;
 import org.fuelteam.watt.httpclient.RequestExecutor;
 import org.fuelteam.watt.lucky.utils.DateUtil;
+import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.stereotype.Component;
 
@@ -35,9 +37,10 @@ public class ReuterAPI {
 
     private static final String RTURL_GetChain1 = "http://api.trkd.thomsonreuters.com/api/QuoteChains/QuoteChains.svc/REST/QuoteChains_1/GetChain_1";
 
-    private volatile Token token;
-
     private volatile Proxy proxy;
+    
+    @Autowired
+    private RedissonClient redissonClient;
     
     private String PREFIX = "REUTER_KEY_";
     
@@ -109,7 +112,6 @@ public class ReuterAPI {
         logger.info("RtApiUtil token succeded with {} at {}", expiration, now);
 
         Token token = new Token(applicationId, username, password, tokenStr, now, reuterKeyEnum);
-        this.token = token;
         return token;
     }
     
