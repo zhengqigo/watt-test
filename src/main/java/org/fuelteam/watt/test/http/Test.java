@@ -10,6 +10,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.fuelteam.watt.httpclient.RequestExecutor;
 import org.fuelteam.watt.lucky.utils.DateUtil;
+import org.fuelteam.watt.lucky.utils.SafeCast;
 import org.fuelteam.watt.lucky.utils.Vardump;
 import org.fuelteam.watt.lucky.utils.WebServiceUtil;
 import org.joda.time.DateTime;
@@ -36,9 +37,11 @@ public class Test {
         params.put("pjname", "1316");
         params.put("erectDate", "2019-12-22");
 
-        String contents = new RequestExecutor<HttpPost>().build(HttpPost.class)
+        List<Object> contents = new RequestExecutor<HttpPost>().build(HttpPost.class)
                 .on(url, params, null, Maps.newHashMap()).timeout(1000, 1000).string();
-        Document doc = Jsoup.parse(contents);
+        Integer code = SafeCast.cast(contents.get(0)).to(Integer.class).orElse(null);
+        if (code == null || code.intValue() != 200) return;
+        Document doc = Jsoup.parse(String.valueOf(contents.get(1)));
         Elements container = doc.select("div.BOC_main");
         Elements trs = container.select("tr");
         Elements ths = trs.get(0).select("th");
@@ -75,9 +78,11 @@ public class Test {
         body.put("status", "delivery");
         params.put("body", body);
         String finalUrl = url + URLEncoder.encode(JSON.toJSONString(params), "UTF-8");
-        String contents = new RequestExecutor<HttpGet>().build(HttpGet.class)
+        List<Object> contents = new RequestExecutor<HttpGet>().build(HttpGet.class)
                 .on(finalUrl, null, null, Maps.newHashMap()).timeout(1000, 1000).string();
-        Vardump.print(contents);
+        Integer code = SafeCast.cast(contents.get(0)).to(Integer.class).orElse(null);
+        if (code == null || code.intValue() != 200) return;
+        Vardump.print(String.valueOf(contents.get(1)));
     }
 
     private static void testAsmx() throws Exception {
@@ -88,9 +93,11 @@ public class Test {
 
         Map<String, String> headers = Maps.newHashMap();
         headers.put("Content-Type", "text/xml;charset=UTF-8");
-        String responseXml = WebServiceUtil.post("http://101.132.157.43:8023/Service1.asmx", headers, envelope, 1000,
+        List<Object> response = WebServiceUtil.post("http://101.132.157.43:8023/Service1.asmx", headers, envelope, 1000,
                 1000);
-        System.out.println(responseXml);
+        Integer code = SafeCast.cast(response.get(0)).to(Integer.class).orElse(null);
+        if (code == null || code.intValue() != 200) return;
+        String responseXml = SafeCast.cast(response.get(1)).to(String.class).orElse("");
         Pattern p = Pattern.compile("<EResult>(.*)</EResult>");
         Matcher m = p.matcher(responseXml);
         if (m.find()) Vardump.print(m.group(0));

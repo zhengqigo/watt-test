@@ -40,6 +40,8 @@ Configuration:
     Logger:
     - name: org.springframework
       level: warn
+    - name: org.apache
+      level: warn
     - name: org.springframework.boot.context.embedded.undertow
       level: info
     - name: org.apache.zookeeper
