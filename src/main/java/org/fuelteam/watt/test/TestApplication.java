@@ -1,5 +1,6 @@
 package org.fuelteam.watt.test;
 
+import org.fuelteam.watt.lucky.utils.Vardump;
 import org.fuelteam.watt.test.call.CallTest;
 import org.fuelteam.watt.test.http.HttpTest;
 import org.fuelteam.watt.test.money.TestRedPacket;
@@ -8,6 +9,7 @@ import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.data.redis.core.RedisTemplate;
 
 @SpringBootApplication(scanBasePackages = { "cn.fuelteam.watt.test", "org.fuelteam" })
 public class TestApplication implements CommandLineRunner {
@@ -28,6 +30,9 @@ public class TestApplication implements CommandLineRunner {
     @Autowired
     private TestRedPacket testRedPacket;
 
+    @Autowired
+    private RedisTemplate<String, String> stringRedisTemplate;
+
     @Override
     public void run(String... args) throws Exception {
         callTest.test();
@@ -35,5 +40,12 @@ public class TestApplication implements CommandLineRunner {
         httptest.testGetWithParams();
         httptest.testAsmx();
         testRedPacket.test();
+
+        long x = System.currentTimeMillis();
+        for (long i = 0; i < 100000l; i++) {
+            stringRedisTemplate.opsForValue().set("test" + i, "test" + i);
+        }
+        long y = (System.currentTimeMillis() - x);
+        Vardump.print(y);
     }
 }
