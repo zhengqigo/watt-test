@@ -1,0 +1,7 @@
+logging:
+  level:
+    root: info
+    com.reger: debug
+    tk.mybatis: info
+    org.mybatis: info
+    org.fuelteam: debug

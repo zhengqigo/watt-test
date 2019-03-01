@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.tuple.Pair;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.fuelteam.watt.httpclient.RequestExecutor;
@@ -18,30 +19,26 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 
-public class Test {
+@Component
+public class HttpTest {
 
-    public static void main(String[] args) throws Exception {
-        testGetWithParams();
-        testPostForm();
-        testAsmx();
-    }
-
-    private static void testPostForm() throws Exception {
+    public void testPostForm() throws Exception {
         String url = "http://srh.bankofchina.com/search/whpj/search.jsp";
         Map<String, String> params = Maps.newHashMap();
         params.put("pjname", "1316");
         params.put("erectDate", "2019-12-22");
 
-        List<Object> contents = new RequestExecutor<HttpPost>().build(HttpPost.class)
+        Pair<Integer, String> contents = new RequestExecutor<HttpPost>().build(HttpPost.class)
                 .on(url, params, null, Maps.newHashMap()).timeout(1000, 1000).string();
-        Integer code = SafeCast.cast(contents.get(0)).to(Integer.class).orElse(null);
+        Integer code = SafeCast.cast(contents.getLeft()).to(Integer.class).orElse(null);
         if (code == null || code.intValue() != 200) return;
-        Document doc = Jsoup.parse(String.valueOf(contents.get(1)));
+        Document doc = Jsoup.parse(String.valueOf(contents.getRight()));
         Elements container = doc.select("div.BOC_main");
         Elements trs = container.select("tr");
         Elements ths = trs.get(0).select("th");
@@ -65,7 +62,7 @@ public class Test {
         Vardump.print(list);
     }
 
-    private static void testGetWithParams() throws Exception {
+    public void testGetWithParams() throws Exception {
         String url = "https://www.exbxg.com:8443/jsonp?";
         Map<String, Object> params = Maps.newHashMap();
         params.put("service", "U_D_FindDeliveryList");
@@ -78,14 +75,14 @@ public class Test {
         body.put("status", "delivery");
         params.put("body", body);
         String finalUrl = url + URLEncoder.encode(JSON.toJSONString(params), "UTF-8");
-        List<Object> contents = new RequestExecutor<HttpGet>().build(HttpGet.class)
+        Pair<Integer, String> contents = new RequestExecutor<HttpGet>().build(HttpGet.class)
                 .on(finalUrl, null, null, Maps.newHashMap()).timeout(1000, 1000).string();
-        Integer code = SafeCast.cast(contents.get(0)).to(Integer.class).orElse(null);
+        Integer code = SafeCast.cast(contents.getLeft()).to(Integer.class).orElse(null);
         if (code == null || code.intValue() != 200) return;
-        Vardump.print(String.valueOf(contents.get(1)));
+        Vardump.print(String.valueOf(contents.getRight()));
     }
 
-    private static void testAsmx() throws Exception {
+    public void testAsmx() throws Exception {
         String format = "<a>%s</a><b>%s</b>";
         String params = String.format(format, "k0NHVwzZwwbefmiPKX5SvBgDfQAFXrL8xPVAfSgZqu1y87i5Sy3jWlEtL4oJfkNZ", 1);
 
@@ -93,11 +90,11 @@ public class Test {
 
         Map<String, String> headers = Maps.newHashMap();
         headers.put("Content-Type", "text/xml;charset=UTF-8");
-        List<Object> response = WebServiceUtil.post("http://101.132.157.43:8023/Service1.asmx", headers, envelope, 1000,
+        Pair<Integer, String> response = WebServiceUtil.post("http://101.132.157.43:8023/Service1.asmx", headers, envelope, 1000,
                 1000);
-        Integer code = SafeCast.cast(response.get(0)).to(Integer.class).orElse(null);
+        Integer code = SafeCast.cast(response.getLeft()).to(Integer.class).orElse(null);
         if (code == null || code.intValue() != 200) return;
-        String responseXml = SafeCast.cast(response.get(1)).to(String.class).orElse("");
+        String responseXml = SafeCast.cast(response.getRight()).to(String.class).orElse("");
         Pattern p = Pattern.compile("<EResult>(.*)</EResult>");
         Matcher m = p.matcher(responseXml);
         if (m.find()) Vardump.print(m.group(0));

@@ -5,12 +5,14 @@ import java.util.List;
 import org.fuelteam.watt.lucky.money.LeftPacket;
 import org.fuelteam.watt.lucky.money.RedPacket;
 import org.fuelteam.watt.lucky.utils.Vardump;
+import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
 
+@Component
 public class TestRedPacket {
 
-    public static void main(String[] args) {
+    public void test() {
         
         Vardump.print(RedPacket.randomSigma(100, 5, 0.1, 50.0));
 
