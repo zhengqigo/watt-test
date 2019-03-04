@@ -5,22 +5,3 @@ logging:
     tk.mybatis: info
     org.mybatis: info
     org.fuelteam: debug
-spring:
-  redis:
-    max-redirects: 3
-    max-total: 20
-    max-idle: 3
-    min-idle: 1
-    max-wait-millis: 300
-    test-on-borrow: true
-    command-timeout-millis: 1000
-    mode: single
-    host: 127.0.0.1
-    port: 6379
-    nodes:
-    - 127.0.0.1:7000
-    - 127.0.0.1:7001
-    - 127.0.0.1:7002
-    - 127.0.0.1:7003
-    - 127.0.0.1:7004
-    - 127.0.0.1:7005
