@@ -1,8 +1,11 @@
 package org.fuelteam.watt.test.lazy;
 
+import java.io.Serializable;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SimplePojo {
+public class SimplePojo implements Serializable{
+
+    private static final long serialVersionUID = -483045036435445656L;
 
     private static final AtomicInteger INSTANCES = new AtomicInteger(0);
 

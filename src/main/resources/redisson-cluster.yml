@@ -2,7 +2,7 @@ clusterServersConfig:
   idleConnectionTimeout: 10000
   pingTimeout: 1000
   connectTimeout: 10000
-  timeout: 3000
+  timeout: 1000
   retryAttempts: 3
   retryInterval: 1500
   reconnectionTimeout: 3000
@@ -13,9 +13,9 @@ clusterServersConfig:
   loadBalancer: !<org.redisson.connection.balancer.RoundRobinLoadBalancer> {}
   slaveSubscriptionConnectionMinimumIdleSize: 1
   slaveSubscriptionConnectionPoolSize: 50
-  slaveConnectionMinimumIdleSize: 32
+  slaveConnectionMinimumIdleSize: 64
   slaveConnectionPoolSize: 64
-  masterConnectionMinimumIdleSize: 32
+  masterConnectionMinimumIdleSize: 64
   masterConnectionPoolSize: 64
   readMode: "SLAVE"
   nodeAddresses:
@@ -33,4 +33,4 @@ clusterServersConfig:
   scanInterval: 1000
 threads: 0
 nettyThreads: 0
-codec: !<org.redisson.codec.JsonJacksonCodec> {}
+codec: !<org.redisson.codec.FstCodec> {}

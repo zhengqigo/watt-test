@@ -14,8 +14,8 @@ singleServerConfig:
   subscriptionConnectionMinimumIdleSize: 1
   subscriptionConnectionPoolSize: 50
   connectionMinimumIdleSize: 32
-  connectionPoolSize: 64
+  connectionPoolSize: 32
   database: 0
 threads: 0
 nettyThreads: 0
-codec: !<org.redisson.codec.JsonJacksonCodec> {}
+codec: !<org.redisson.codec.FstCodec> {}
