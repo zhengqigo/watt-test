@@ -28,7 +28,7 @@ public class TestApplication {
 
     }
 
-    @Value("${redisMode:single}")
+    @Value("${redisMode:cluster}")
     private String redisMode;
 
     @Bean

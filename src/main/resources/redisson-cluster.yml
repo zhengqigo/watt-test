@@ -7,7 +7,7 @@ clusterServersConfig:
   retryInterval: 1500
   reconnectionTimeout: 3000
   failedAttempts: 3
-  password: null
+  password: 0Y0j8Zeu8iis1qIYHJUoUy2OsUD3u57JGeKosvfRKFxm75hpLa
   subscriptionsPerConnection: 5
   clientName: null
   loadBalancer: !<org.redisson.connection.balancer.RoundRobinLoadBalancer> {}
@@ -19,11 +19,19 @@ clusterServersConfig:
   masterConnectionPoolSize: 64
   readMode: "SLAVE"
   nodeAddresses:
-  - "redis://127.0.0.1:7004"
-  - "redis://127.0.0.1:7001"
-  - "redis://127.0.0.1:7000"
+  - "redis://172.16.80.41:7000"
+  - "redis://172.16.80.41:7011"
+  - "redis://172.16.80.42:7001"
+  - "redis://172.16.80.42:7010"
+  - "redis://172.16.80.43:7002"
+  - "redis://172.16.80.43:7009"
+  - "redis://172.16.80.44:7003"
+  - "redis://172.16.80.44:7008"
+  - "redis://172.16.80.45:7004"
+  - "redis://172.16.80.46:7005"
+  - "redis://172.16.80.46:7010"
   scanInterval: 1000
 threads: 0
 nettyThreads: 0
 codec: !<org.redisson.codec.JsonJacksonCodec> {}
-"transportMode": "NIO"
+"transportMode": "EPOLL"
