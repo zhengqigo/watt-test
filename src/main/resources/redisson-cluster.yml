@@ -34,4 +34,3 @@ clusterServersConfig:
 threads: 0
 nettyThreads: 0
 codec: !<org.redisson.codec.JsonJacksonCodec> {}
-"transportMode": "EPOLL"

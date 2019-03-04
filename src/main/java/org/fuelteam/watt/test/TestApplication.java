@@ -2,6 +2,7 @@ package org.fuelteam.watt.test;
 
 import java.io.IOException;
 
+import org.fuelteam.watt.lucky.utils.OSUtil;
 import org.fuelteam.watt.lucky.utils.Vardump;
 import org.fuelteam.watt.test.call.CallTest;
 import org.fuelteam.watt.test.http.HttpTest;
@@ -9,6 +10,7 @@ import org.fuelteam.watt.test.money.TestRedPacket;
 import org.redisson.Redisson;
 import org.redisson.api.RedissonClient;
 import org.redisson.config.Config;
+import org.redisson.config.TransportMode;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.Banner;
 import org.springframework.boot.CommandLineRunner;
@@ -34,7 +36,10 @@ public class TestApplication {
     @Bean
     public RedissonClient redissonClient() throws IOException {
         String ymlFile = "redisson-" + (redisMode.equalsIgnoreCase("single") ? "single" : "cluster") + ".yml";
-        return Redisson.create(Config.fromYAML(new ClassPathResource(ymlFile).getInputStream()));
+        Config config = Config.fromYAML(new ClassPathResource(ymlFile).getInputStream());
+        TransportMode transportMode = OSUtil.unix() ? TransportMode.EPOLL : TransportMode.NIO;
+        config.setTransportMode(transportMode);
+        return Redisson.create(config);
     }
 
     @Bean
