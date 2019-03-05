@@ -95,7 +95,7 @@ public class HttpTest {
         Integer code = SafeCast.cast(response.getLeft()).to(Integer.class).orElse(null);
         if (code == null || code.intValue() != 200) return;
         String responseXml = SafeCast.cast(response.getRight()).to(String.class).orElse("");
-        Pattern p = Pattern.compile("<EResult>(.*)</EResult>");
+        Pattern p = Pattern.compile("(?<=<EResult>).*(?=</EResult>)");
         Matcher m = p.matcher(responseXml);
         if (m.find()) Vardump.print(m.group(0));
     }
