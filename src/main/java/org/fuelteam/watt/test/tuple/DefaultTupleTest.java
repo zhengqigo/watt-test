@@ -25,6 +25,7 @@ public class DefaultTupleTest {
     public void two() {
         final Tuple t2 = tripletTupleType.of(2l, "two", 'b');
         Vardump.print("t2 = " + t2);
+        System.out.println(t2.toString());
     }
 
     @Test
