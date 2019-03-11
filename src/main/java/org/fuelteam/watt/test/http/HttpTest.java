@@ -19,6 +19,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.alibaba.fastjson.JSON;
@@ -27,6 +29,8 @@ import com.google.common.collect.Maps;
 
 @Component
 public class HttpTest {
+	
+    private static final Logger logger = LoggerFactory.getLogger(HttpTest.class);
 
     public void testPostForm() throws Exception {
         String url = "http://srh.bankofchina.com/search/whpj/search.jsp";
@@ -90,8 +94,13 @@ public class HttpTest {
 
         Map<String, String> headers = Maps.newHashMap();
         headers.put("Content-Type", "text/xml;charset=UTF-8");
-        Pair<Integer, String> response = WebServiceUtil.post("http://101.132.157.43:8023/Service1.asmx", headers, envelope, 1000,
-                1000);
+        Pair<Integer, String> response = Pair.of(0, "");
+        try {
+        	response = WebServiceUtil.post("http://101.132.157.43:8023/Service1.asmx", headers, envelope, 1000,
+                    1000);
+        }catch(Exception ex) {
+        	logger.error("testAsmx timeout exception");
+        }
         Integer code = SafeCast.cast(response.getLeft()).to(Integer.class).orElse(null);
         if (code == null || code.intValue() != 200) return;
         String responseXml = SafeCast.cast(response.getRight()).to(String.class).orElse("");
