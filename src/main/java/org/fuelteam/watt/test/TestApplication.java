@@ -58,7 +58,7 @@ public class TestApplication {
             callTest.test();
             httptest.testPostForm();
             httptest.testGetWithParams();
-            httptest.testAsmx();
+            httptest.testAsmx1();
             testRedPacket.test();
 
             long x = System.currentTimeMillis();

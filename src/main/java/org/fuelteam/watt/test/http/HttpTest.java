@@ -108,4 +108,28 @@ public class HttpTest {
         Matcher m = p.matcher(responseXml);
         if (m.find()) Vardump.print(m.group(0));
     }
+    
+    public void testAsmx1() throws Exception {
+        String format = "<applicationID>%s</applicationID><passport>%s</passport>";
+        
+        String params = String.format(format, 2, "32asdjfkaf;ScdajcASDawdwe");
+
+        String envelope = WebServiceUtil.prepare("CheckApplicationToken", "xmlns=\"http://www.JSZ.com/\"", params);
+
+        Map<String, String> headers = Maps.newHashMap();
+        headers.put("Content-Type", "text/xml;charset=UTF-8");
+        Pair<Integer, String> response = Pair.of(0, "");
+        try {
+            response = WebServiceUtil.post("http://172.16.20.208/JSZ.WWW.ES/wses.asmx", headers, envelope, 1000,
+                    1000);
+        }catch(Exception ex) {
+            logger.error("testAsmx1 timeout exception");
+        }
+        Integer code = SafeCast.cast(response.getLeft()).to(Integer.class).orElse(null);
+        if (code == null || code.intValue() != 200) return;
+        String responseXml = SafeCast.cast(response.getRight()).to(String.class).orElse("");
+        Pattern p = Pattern.compile("(?<=<CheckApplicationTokenResult>).*(?=</CheckApplicationTokenResult>)");
+        Matcher m = p.matcher(responseXml);
+        if (m.find()) Vardump.print(m.group(0));
+    }
 }
