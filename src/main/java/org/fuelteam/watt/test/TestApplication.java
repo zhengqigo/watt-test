@@ -46,36 +46,4 @@ public class TestApplication {
         config.setTransportMode(transportMode);
         return Redisson.create(config);
     }
-
-    @Bean
-    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
-        RedissonClient redissonClient = ctx.getBean(RedissonClient.class);
-        CallTest callTest = ctx.getBean(CallTest.class);
-        HttpTest httptest = ctx.getBean(HttpTest.class);
-        TestRedPacket testRedPacket = ctx.getBean(TestRedPacket.class);
-
-        return args -> {
-            callTest.test();
-            httptest.testPostForm();
-            httptest.testGetWithParams();
-            httptest.testAsmx1();
-            testRedPacket.test();
-
-            long x = System.currentTimeMillis();
-            for (long i = 0; i < 10000l; i++) {
-                redissonClient.getBucket("test" + i).setAsync(new SimplePojo("test" + i));
-            }
-            Vardump.print(RedissonUtil.getAsync(redissonClient, "test0", SimplePojo.class).getValue());
-
-            redissonClient.getBucket("list").set(Lists.newArrayList(new SimplePojo("0"), new SimplePojo("1")));
-
-            @SuppressWarnings("unchecked")
-            List<SimplePojo> list = (List<SimplePojo>) redissonClient.getBucket("list").get();
-            for (SimplePojo pojo : list) {
-                Vardump.print(pojo.getValue());
-            }
-            long y = (System.currentTimeMillis() - x);
-            Vardump.print(y);
-        };
-    }
 }
