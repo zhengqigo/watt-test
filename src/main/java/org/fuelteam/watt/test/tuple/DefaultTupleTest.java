@@ -2,6 +2,7 @@ package org.fuelteam.watt.test.tuple;
 
 import static org.testng.AssertJUnit.assertEquals;
 
+import org.fuelteam.watt.lucky.tuple.DefaultTupleType;
 import org.fuelteam.watt.lucky.tuple.Tuple;
 import org.fuelteam.watt.lucky.tuple.TupleType;
 import org.fuelteam.watt.lucky.utils.Vardump;
@@ -16,10 +17,20 @@ public class DefaultTupleTest {
     public static TupleType emptyTupleType = TupleType.DefaultFactory.create();
 
     public static TupleType xuple = TupleType.DefaultFactory.create(10);
+    
+    public static DefaultTupleType default1 = new DefaultTupleType(3);
+    
+    @Test
+    public void de1() {
+        final Tuple t1 = default1.of(1, "one", 'a');
+        System.out.println("x1==" + (Integer)t1.getNthValue(0));
+        Vardump.print("t11 = " + t1);
+    }
 
     @Test
     public void one() {
         final Tuple t1 = tripletTupleType.of(1, "one", 'a');
+        System.out.println("x==" + (Integer)t1.getNthValue(0));
         Vardump.print("t1 = " + t1);
     }
 
