@@ -5,7 +5,7 @@ import java.util.concurrent.ForkJoinPool;
 import org.fuelteam.watt.lucky.parallel.DefaultForkJoinParallel;
 import org.fuelteam.watt.lucky.parallel.ForkJoinPoolFactory;
 import org.fuelteam.watt.lucky.parallel.IParallel;
-import org.fuelteam.watt.lucky.utils.Vardump;
+import org.fuelteam.watt.lucky.print.Vardump;
 import org.junit.Test;
 
 import com.alibaba.fastjson.JSON;

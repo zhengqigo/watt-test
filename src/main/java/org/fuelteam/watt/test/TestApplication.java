@@ -3,9 +3,8 @@ package org.fuelteam.watt.test;
 import java.io.IOException;
 import java.util.List;
 
+import org.fuelteam.watt.lucky.print.Vardump;
 import org.fuelteam.watt.lucky.utils.OSUtil;
-import org.fuelteam.watt.lucky.utils.RedissonUtil;
-import org.fuelteam.watt.lucky.utils.Vardump;
 import org.fuelteam.watt.test.call.CallTest;
 import org.fuelteam.watt.test.http.HttpTest;
 import org.fuelteam.watt.test.lazy.SimplePojo;
@@ -45,5 +44,22 @@ public class TestApplication {
         TransportMode transportMode = OSUtil.unix() ? TransportMode.EPOLL : TransportMode.NIO;
         config.setTransportMode(transportMode);
         return Redisson.create(config);
+    }
+    
+    @Bean
+    public CommandLineRunner commandLineRunner(ApplicationContext ctx) {
+        //RedissonClient redissonClient = ctx.getBean(RedissonClient.class);
+        //CallTest callTest = ctx.getBean(CallTest.class);
+        HttpTest httptest = ctx.getBean(HttpTest.class);
+        //TestRedPacket testRedPacket = ctx.getBean(TestRedPacket.class);
+
+        return args -> {
+            //callTest.test();
+            //httptest.testPostForm();
+           // httptest.testGetWithParams();
+            httptest.testAsmx1();
+            httptest.testAsmx2();
+            //testRedPacket.test();
+        };
     }
 }

@@ -1,7 +1,7 @@
 package org.fuelteam.watt.test.utils;
 
+import org.fuelteam.watt.lucky.print.Vardump;
 import org.fuelteam.watt.lucky.utils.Condition;
-import org.fuelteam.watt.lucky.utils.Vardump;
 
 public class ConditionTest {
 

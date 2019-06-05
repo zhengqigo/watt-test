@@ -1,10 +1,9 @@
 package org.fuelteam.watt.test.call;
 
-import org.fuelteam.watt.lucky.call.AbstractFunction;
-import org.fuelteam.watt.lucky.call.Async;
-import org.fuelteam.watt.lucky.call.Callback;
-import org.fuelteam.watt.lucky.context.ApplicationContextUtil;
-import org.fuelteam.watt.lucky.utils.Vardump;
+import org.fuelteam.watt.lucky.async.AbstractFunction;
+import org.fuelteam.watt.lucky.async.Async;
+import org.fuelteam.watt.lucky.async.Callback;
+import org.fuelteam.watt.lucky.print.Vardump;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,17 +13,15 @@ public class CallTest {
         Callback<Integer> cb = new Callback<Integer>() {
             @Override
             public void onSuccess(Integer t) {
-                Vardump.print("succeded");
+                Vardump.print("onSuccess");
             }
 
             @Override
             public void onFailure(Exception ex) {
-                Vardump.print("failed");
+                Vardump.print("onFailure");
             }
         };
-
-        Async async = ApplicationContextUtil.getBean(Async.class);
-        async.doAsync(new AbstractFunction<Integer>(cb) {
+        Async.doAsync(new AbstractFunction<Integer>(cb) {
             @Override
             public Integer execute() throws Exception {
                 return 1;
